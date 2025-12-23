@@ -8,7 +8,5 @@ class Customer(Base):
 
     id_customer = Column(Integer, primary_key=True)
     name = Column(String(150), nullable=False)
-    email = Column(String(100))
-    phone = Column(String(30))
 
     contracts = relationship("Contract", back_populates="customer")

@@ -1,16 +1,19 @@
-from sqlalchemy import Column, Integer, Float, ForeignKey, Text, String
+# app/models/result.py
+from sqlalchemy import Column, Integer, ForeignKey
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
-
 from .base import Base
 
 class Result(Base):
     __tablename__ = "result"
 
     id_result = Column(Integer, primary_key=True)
-    id_experiment = Column(Integer, ForeignKey("experiment.id_experiment"))
+    measurements = Column(JSONB)
 
-    value = Column(Float)
-    unit = Column(String(20))
-    comment = Column(Text)
+    id_oscillogram_file = Column(
+        Integer,
+        ForeignKey("file.id_file", ondelete="SET NULL")
+    )
 
-    experiment = relationship("Experiment", back_populates="results")
+    oscillogram_file = relationship("File", back_populates="results")
+    experiment = relationship("Experiment", back_populates="result", uselist=False)

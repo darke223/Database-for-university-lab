@@ -1,14 +1,12 @@
-from sqlalchemy import Column, Integer, String, Text
+# app/models/material.py
+from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
-
 from .base import Base
 
 class Material(Base):
     __tablename__ = "material"
 
     id_material = Column(Integer, primary_key=True)
-    name = Column(String(100), nullable=False)
-    category = Column(String(50))
-    description = Column(Text)
+    name = Column(String(255), nullable=False)
 
     samples = relationship("Sample", back_populates="material")
