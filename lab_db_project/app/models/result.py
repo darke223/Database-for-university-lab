@@ -1,4 +1,3 @@
-# app/models/result.py
 from sqlalchemy import Column, Integer, ForeignKey
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship

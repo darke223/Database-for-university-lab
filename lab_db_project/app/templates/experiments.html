@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Список экспериментов</title>
+</head>
+<body>
+<h1>Список экспериментов</h1>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Дата</th>
+        <th>Комментарий</th>
+    </tr>
+    {% for exp in experiments %}
+    <tr>
+        <td>{{ exp.id_experiment }}</td>
+        <td>{{ exp.experiment_date }}</td>
+        <td>{{ exp.comments }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>

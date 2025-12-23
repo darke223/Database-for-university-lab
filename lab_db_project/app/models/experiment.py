@@ -1,4 +1,3 @@
-# app/models/experiment.py
 from sqlalchemy import Column, Integer, Date, Text, ForeignKey
 from sqlalchemy.orm import relationship
 from .base import Base
