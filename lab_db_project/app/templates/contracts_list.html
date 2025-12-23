@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Список контрактов</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        th { background-color: #f4f4f4; }
+        a.button { display: inline-block; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 5px; margin-bottom: 20px; }
+        a.button:hover { background: #0056b3; }
+        tr:hover { background-color: #f9f9f9; }
+    </style>
+</head>
+<body>
+    <h1>Список контрактов</h1>
+    <a href="/contracts/new" class="button">➕ Добавить контракт</a>
+
+    {% if contracts|length == 0 %}
+        <p>Пока нет контрактов. Создайте первый!</p>
+    {% else %}
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Клиент</th>
+                <th>Дата доставки образца</th>
+                <th>Тип доставки</th>
+                <th>Действия</th>
+            </tr>
+            {% for cont in contracts %}
+            <tr>
+                <td>{{ cont.id_contract }}</td>
+                <td>{{ cont.customer.name }}</td>
+                <td>{{ cont.date_of_sample_delivery }}</td>
+                <td>{{ cont.delivery_type }}</td>
+                <td>
+                    <a href="/contracts/{{ cont.id_contract }}/edit">✏️ Редактировать</a> |
+                    <form action="/contracts/{{ cont.id_contract }}/delete" method="post" style="display: inline;" onsubmit="return confirm('Удалить контракт? Это может повлиять на эксперименты!');">
+                        <button type="submit" style="color: red; background: none; border: none; cursor: pointer;">🗑️ Удалить</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+    <br>
+    <a href="/">🏠 На главную</a>
+</body>
+</html>

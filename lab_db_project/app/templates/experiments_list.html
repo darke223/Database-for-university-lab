@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Список экспериментов</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 12px; text-align: left; }
+        th { background-color: #f4f4f4; }
+        a.button { display: inline-block; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 5px; margin-bottom: 20px; }
+        a.button:hover { background: #0056b3; }
+        tr:hover { background-color: #f9f9f9; }
+        .id-link { color: #007bff; text-decoration: none; font-weight: bold; }
+        .id-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>Список экспериментов</h1>
+
+    <a href="/experiments/new" class="button">➕ Добавить новый эксперимент</a>
+
+    {% if experiments|length == 0 %}
+        <p>Пока нет ни одного эксперимента. <a href="/experiments/new">Создайте первый</a>!</p>
+    {% else %}
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Дата</th>
+                <th>Клиент</th>
+                <th>Контракт</th>
+                <th>Образец (материал)</th>
+                <th>Тип</th>
+                <th>Статус</th>
+                <th>Комментарий</th>
+            </tr>
+            {% for exp in experiments %}
+            <tr>
+                <td><a href="/experiments/{{ exp.id_experiment }}" class="id-link">{{ exp.id_experiment }}</a></td>
+                <td>{{ exp.experiment_date }}</td>
+                <td>{{ exp.contract.customer.name }}</td>
+                <td>№{{ exp.contract.id_contract }}</td>
+                <td>{{ exp.sample.id_sample }} ({{ exp.sample.material.name }})</td>
+                <td>{{ exp.experiment_type.name }}</td>
+                <td>{{ exp.status.name }}</td>
+                <td>{{ exp.comments or '-' }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+    <br>
+    <a href="/">&larr; На главную</a>
+</body>
+</html>

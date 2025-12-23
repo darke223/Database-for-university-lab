@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% if is_edit %} Редактирование клиента {% else %} Новый клиент {% endif %}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        label { display: block; margin-top: 15px; font-weight: bold; }
+        input { width: 100%; padding: 8px; margin-top: 5px; font-size: 16px; }
+        button { margin-top: 30px; padding: 12px 24px; background: #28a745; color: white; border: none; border-radius: 5px; font-size: 16px; }
+        button:hover { background: #218838; }
+        a { color: #007bff; }
+    </style>
+</head>
+<body>
+    <h1>{% if is_edit %} Редактирование клиента №{{ customer.id_customer }} {% else %} Создание нового клиента {% endif %}</h1>
+
+    <form method="post">
+        <label>Имя клиента</label>
+        <input type="text" name="name" value="{% if is_edit %}{{ customer.name }}{% endif %}" required>
+
+        <button type="submit">{% if is_edit %} Сохранить изменения {% else %} Создать клиента {% endif %}</button>
+    </form>
+
+    <br>
+    <a href="/customers/">← Вернуться к списку</a>
+</body>
+</html>

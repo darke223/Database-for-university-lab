@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Список материалов</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f8f9fa; }
+        h1 { color: #2c3e50; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 12px; text-align: left; }
+        th { background-color: #f4f4f4; }
+        a.button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        a.button:hover { background: #0056b3; }
+        tr:hover { background-color: #f0f8ff; }
+        .actions a { margin-right: 10px; }
+        .delete-btn {
+            color: red;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Список материалов</h1>
+
+    <a href="/materials/new" class="button">➕ Добавить материал</a>
+
+    {% if materials|length == 0 %}
+        <p>Пока нет материалов в справочнике. Добавьте первый!</p>
+    {% else %}
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Название материала</th>
+                <th>Действия</th>
+            </tr>
+            {% for mat in materials %}
+            <tr>
+                <td>{{ mat.id_material }}</td>
+                <td>{{ mat.name }}</td>
+                <td class="actions">
+                    <a href="/materials/{{ mat.id_material }}/edit">✏️ Редактировать</a>
+                    <form action="/materials/{{ mat.id_material }}/delete" method="post" style="display: inline;"
+                          onsubmit="return confirm('Удалить материал «{{ mat.name }}»? Это может повлиять на образцы!');">
+                        <button type="submit" class="delete-btn">🗑️ Удалить</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+    <br>
+    <a href="/">🏠 На главную</a>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Эксперимент №{{ exp.id_experiment }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; }
+        h1 { color: #333; }
+        h2 { color: #555; border-bottom: 2px solid #eee; padding-bottom: 5px; }
+        .section { margin-bottom: 30px; background: #f9f9f9; padding: 20px; border-radius: 8px; }
+        .label { font-weight: bold; color: #444; }
+        .value { margin-left: 10px; }
+        pre { background: #f0f0f0; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        a { color: #007bff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>Эксперимент №{{ exp.id_experiment }}</h1>
+
+    <p><a href="/experiments/">← Вернуться к списку</a></p>
+
+    <div class="section">
+        <h2>Основная информация</h2>
+        <p><span class="label">Дата проведения:</span> <span class="value">{{ exp.experiment_date }}</span></p>
+        <p><span class="label">Тип эксперимента:</span> <span class="value">{{ exp.experiment_type.name }}</span></p>
+        <p><span class="label">Статус:</span> <span class="value">{{ exp.status.name }}</span></p>
+        <p><span class="label">Комментарий:</span> <span class="value">{{ exp.comments or '—' }}</span></p>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+        <a href="/experiments/{{ exp.id_experiment }}/edit" style="padding: 10px 20px; background: #ffc107; color: white; border-radius: 5px; text-decoration: none;">✏️ Редактировать</a>
+        <form action="/experiments/{{ exp.id_experiment }}/delete" method="post" style="display: inline;" onsubmit="return confirm('Точно удалить этот эксперимент?');">
+            <button type="submit" style="padding: 10px 20px; background: #dc3545; color: white; border: none; border-radius: 5px; margin-left: 10px;">🗑️ Удалить</button>
+        </form>
+    </div>
+
+    <div class="section">
+        <h2>Контракт и клиент</h2>
+        <p><span class="label">Клиент:</span> <span class="value">{{ exp.contract.customer.name }}</span></p>
+        <p><span class="label">Номер контракта:</span> <span class="value">{{ exp.contract.id_contract }}</span></p>
+        <p><span class="label">Дата доставки образца:</span> <span class="value">{{ exp.contract.date_of_sample_delivery }}</span></p>
+        <p><span class="label">Тип доставки:</span> <span class="value">{{ exp.contract.delivery_type }}</span></p>
+        {% if exp.contract.technical_specification %}
+        <p><span class="label">Техническое задание:</span><br>
+            <pre>{{ exp.contract.technical_specification }}</pre>
+        </p>
+        {% endif %}
+    </div>
+
+    <div class="section">
+        <h2>Образец</h2>
+        <p><span class="label">ID образца:</span> <span class="value">{{ exp.sample.id_sample }}</span></p>
+        <p><span class="label">Материал:</span> <span class="value">{{ exp.sample.material.name }}</span></p>
+        {% if exp.sample.description %}
+        <p><span class="label">Описание:</span> <span class="value">{{ exp.sample.description }}</span></p>
+        {% endif %}
+        {% if exp.sample.geometry %}
+        <p><span class="label">Геометрия:</span><br>
+            <pre>{{ exp.sample.geometry | tojson(indent=2) }}</pre>
+        </p>
+        {% endif %}
+        {% if exp.sample.physical_properties %}
+        <p><span class="label">Физические свойства:</span><br>
+            <pre>{{ exp.sample.physical_properties | tojson(indent=2) }}</pre>
+        </p>
+        {% endif %}
+    </div>
+
+    <div class="section">
+        <h2>Оборудование</h2>
+        <p><span class="label">Ударяющий элемент (Striker):</span> <span class="value">{{ exp.striker.material }}</span></p>
+        {% if exp.striker.geometric_dimensions %}
+        <p><span class="label">Размеры striker:</span><br>
+            <pre>{{ exp.striker.geometric_dimensions | tojson(indent=2) }}</pre>
+        </p>
+        {% endif %}
+
+        <p><span class="label">Нагружающий стержень:</span> <span class="value">{{ exp.loading_rod.material }} (ID: {{ exp.loading_rod.id_rod }})</span></p>
+        <p><span class="label">Опорный стержень:</span> <span class="value">{{ exp.support_rod.material }} (ID: {{ exp.support_rod.id_rod }})</span></p>
+    </div>
+
+    {% if exp.result %}
+    <div class="section">
+        <h2>Результат эксперимента</h2>
+        {% if exp.result.measurements %}
+        <p><span class="label">Измерения:</span><br>
+            <pre>{{ exp.result.measurements | tojson(indent=2) }}</pre>
+        </p>
+        {% endif %}
+        {% if exp.result.oscillogram_file %}
+        <p><span class="label">Осциллограмма:</span> <span class="value">{{ exp.result.oscillogram_file.file_path }}</span></p>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    {% if exp.files %}
+    <div class="section">
+        <h2>Прикреплённые файлы ({{ exp.files|length }})</h2>
+        <ul>
+            {% for file in exp.files %}
+            <li>{{ file.file_type or 'Файл' }}: {{ file.file_path }} (создан: {{ file.created_at }})</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% else %}
+    <div class="section">
+        <h2>Прикреплённые файлы</h2>
+        <p>Файлы пока не прикреплены.</p>
+    </div>
+    {% endif %}
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Лабораторная база данных</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 60px; background: #f8f9fa; color: #333; }
+        .container { max-width: 800px; margin: 0 auto; text-align: center; }
+        h1 { color: #2c3e50; margin-bottom: 40px; }
+        .menu { display: flex; flex-direction: column; gap: 20px; }
+        .menu a {
+            display: block;
+            padding: 25px;
+            font-size: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-decoration: none;
+            color: #2c3e50;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .menu a:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            background: #e3f2fd;
+        }
+        footer { margin-top: 100px; color: #777; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Лабораторная база данных</h1>
+        <p>Система учёта механических испытаний материалов</p>
+
+        <div class="menu">
+            <a href="/experiments/">📋 Эксперименты</a>
+            <a href="/customers/">👥 Клиенты</a>
+            <a href="/contracts/">📄 Контракты</a>
+            <a href="/materials/">🧪 Материалы</a>
+        </div>
+
+        <footer>
+            <p>Проект по базам данных • 2025</p>
+        </footer>
+    </div>
+</body>
+</html>

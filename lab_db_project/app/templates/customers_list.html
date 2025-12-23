@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Список клиентов</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        th { background-color: #f4f4f4; }
+        a.button { display: inline-block; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 5px; margin-bottom: 20px; }
+        a.button:hover { background: #0056b3; }
+        tr:hover { background-color: #f9f9f9; }
+    </style>
+</head>
+<body>
+    <h1>Список клиентов</h1>
+    <a href="/customers/new" class="button">➕ Добавить клиента</a>
+
+    {% if customers|length == 0 %}
+        <p>Пока нет клиентов. Создайте первого!</p>
+    {% else %}
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Имя</th>
+                <th>Действия</th>
+            </tr>
+            {% for cust in customers %}
+            <tr>
+                <td>{{ cust.id_customer }}</td>
+                <td>{{ cust.name }}</td>
+                <td>
+                    <a href="/customers/{{ cust.id_customer }}/edit">✏️ Редактировать</a> |
+                    <form action="/customers/{{ cust.id_customer }}/delete" method="post" style="display: inline;" onsubmit="return confirm('Удалить клиента? Это может повлиять на контракты!');">
+                        <button type="submit" style="color: red; background: none; border: none; cursor: pointer;">🗑️ Удалить</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+    <br>
+    <a href="/">🏠 На главную</a>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% if is_edit %} Редактирование контракта {% else %} Новый контракт {% endif %}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        label { display: block; margin-top: 15px; font-weight: bold; }
+        select, input, textarea { width: 100%; padding: 8px; margin-top: 5px; font-size: 16px; }
+        button { margin-top: 30px; padding: 12px 24px; background: #28a745; color: white; border: none; border-radius: 5px; font-size: 16px; }
+        button:hover { background: #218838; }
+        a { color: #007bff; }
+    </style>
+</head>
+<body>
+    <h1>{% if is_edit %} Редактирование контракта №{{ contract.id_contract }} {% else %} Создание нового контракта {% endif %}</h1>
+
+    <form method="post">
+        <label>Клиент</label>
+        <select name="id_customer" required>
+            {% for cust in customers %}
+            <option value="{{ cust.id_customer }}" {% if is_edit and contract.id_customer == cust.id_customer %} selected {% endif %}>
+                {{ cust.name }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <label>Дата доставки образца</label>
+        <input type="date" name="date_of_sample_delivery" value="{% if is_edit %}{{ contract.date_of_sample_delivery }}{% endif %}" required>
+
+        <label>Тип доставки</label>
+        <input type="text" name="delivery_type" value="{% if is_edit %}{{ contract.delivery_type }}{% endif %}" required>
+
+        <label>Техническое задание</label>
+        <textarea name="technical_specification" rows="4">{% if is_edit %}{{ contract.technical_specification or '' }}{% endif %}</textarea>
+
+        <label>Материалы для изучения</label>
+        <textarea name="materials_to_study" rows="4">{% if is_edit %}{{ contract.materials_to_study or '' }}{% endif %}</textarea>
+
+        <label>Отчёт</label>
+        <textarea name="report" rows="4">{% if is_edit %}{{ contract.report or '' }}{% endif %}</textarea>
+
+        <label>Документ контракта</label>
+        <input type="text" name="contract_document" value="{% if is_edit %}{{ contract.contract_document or '' }}{% endif %}" placeholder="Путь к файлу или ссылка">
+
+        <button type="submit">{% if is_edit %} Сохранить изменения {% else %} Создать контракт {% endif %}</button>
+    </form>
+
+    <br>
+    <a href="/contracts/">← Вернуться к списку</a>
+</body>
+</html>
