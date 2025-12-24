@@ -15,3 +15,6 @@ class Sample(Base):
 
     material = relationship("Material", back_populates="samples")
     experiments = relationship("Experiment", back_populates="sample")
+
+
+
