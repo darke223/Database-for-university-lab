@@ -18,13 +18,19 @@
 <body>
     <h1>Список экспериментов</h1>
 
-    <a href="/experiments/new" class="button">➕ Добавить новый эксперимент</a>
+    <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 25px; flex-wrap: wrap;">
+        <a href="/experiments/new" class="button" style="margin: 0; display: flex; align-items: center; height: 45px; box-sizing: border-box;">➕ Новый эксперимент</a>
+        <button type="submit" form="bulk_action_form" class="button" style="background: #28a745; border: none; cursor: pointer; margin: 0; font-size: 16px; height: 45px; display: flex; align-items: center; box-sizing: border-box;">📦 Экспортировать выбранные</button>
+        <a href="/experiments/import" class="button" style="background: #6c757d; margin: 0; display: flex; align-items: center; height: 45px; box-sizing: border-box;">📥 Импортировать из ZIP</a>
+    </div>
 
     {% if experiments|length == 0 %}
         <p>Пока нет ни одного эксперимента. <a href="/experiments/new">Создайте первый</a>!</p>
     {% else %}
+        <form id="bulk_action_form" action="/experiments/bulk-export" method="post">
         <table>
             <tr>
+                <th style="width: 20px;"><input type="checkbox" onclick="toggleAll(this)"></th>
                 <th>ID</th>
                 <th>Дата</th>
                 <th>Клиент</th>
@@ -36,6 +42,7 @@
             </tr>
             {% for exp in experiments %}
             <tr>
+                <td><input type="checkbox" name="experiment_ids" value="{{ exp.id_experiment }}"></td>
                 <td><a href="/experiments/{{ exp.id_experiment }}" class="id-link">{{ exp.id_experiment }}</a></td>
                 <td>{{ exp.experiment_date }}</td>
                 <td>{{ exp.contract.customer.name }}</td>
@@ -47,9 +54,19 @@
             </tr>
             {% endfor %}
         </table>
+        </form>
+
+        <script>
+            function toggleAll(source) {
+                checkboxes = document.getElementsByName('experiment_ids');
+                for(var i=0, n=checkboxes.length; i<n; i++) {
+                    checkboxes[i].checked = source.checked;
+                }
+            }
+        </script>
     {% endif %}
 
     <br>
-    <a href="/">&larr; На главную</a>
+    <a href="/">🏠 На главную</a>
 </body>
 </html>

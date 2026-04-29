@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Index
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 from .base import Base
@@ -11,3 +11,7 @@ class Striker(Base):
     geometric_dimensions = Column(JSONB, nullable=False)
 
     experiments = relationship("Experiment", back_populates="striker")
+
+    __table_args__ = (
+        Index('ix_striker_geom_dims_gin', 'geometric_dimensions', postgresql_using='gin'),
+    )

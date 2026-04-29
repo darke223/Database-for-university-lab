@@ -1,4 +1,3 @@
-# app/models/experiment.py
 from sqlalchemy import Column, Integer, Date, Text, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship
 

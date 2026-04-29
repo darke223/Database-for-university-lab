@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Поиск данных</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #fff;
+            color: #333;
+        }
+
+        .search-panel {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            margin-bottom: 30px;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        .filter-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 0.9em;
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        input,
+        select {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 25px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .btn-reset {
+            padding: 8px 15px;
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9em;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-left: 10px;
+        }
+
+        .btn-reset:hover {
+            background: #eee;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .id-link {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .id-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🔎 Расширенный поиск</h1>
+    <p><a href="/">🏠 На главную</a></p>
+
+    <div class="search-panel">
+        <form action="/experiments/search" method="get">
+            <div class="filter-group">
+                <div class="filter-item">
+                    <label>Дата от</label>
+                    <input type="date" name="date_from" value="{{ filters.date_from or '' }}">
+                </div>
+                <div class="filter-item">
+                    <label>Дата до</label>
+                    <input type="date" name="date_to" value="{{ filters.date_to or '' }}">
+                </div>
+                <div class="filter-item">
+                    <label>Материал</label>
+                    <select name="material_id">
+                        <option value="">Все</option>
+                        {% for mat in materials %}
+                        <option value="{{ mat.id_material }}" {% if filters.material_id==mat.id_material|string
+                            %}selected{% endif %}>{{ mat.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit">Найти</button>
+                <a href="/experiments/search" class="btn-reset">Сбросить фильтры</a>
+            </div>
+        </form>
+    </div>
+
+    <h2>Результаты ({{ experiments|length }})</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Дата</th>
+                <th>Клиент</th>
+                <th>Материал</th>
+                <th>Геометрия (JSONB)</th>
+                <th>Статус</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for exp in experiments %}
+            <tr>
+                <td>{{ exp.id_experiment }}</td>
+                <td>{{ exp.experiment_date }}</td>
+                <td>{{ exp.contract.customer.name }}</td>
+                <td>{{ exp.sample.material.name }}</td>
+                <td>{{ exp.sample.geometry | format_json }}</td>
+                <td>{{ exp.status.name }}</td>
+                <td><a href="/experiments/{{ exp.id_experiment }}">Открыть</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+
+</html>

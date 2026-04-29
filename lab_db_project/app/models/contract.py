@@ -1,4 +1,3 @@
-# app/models/contract.py
 from sqlalchemy import Column, Integer, Date, Text, String, ForeignKey
 from sqlalchemy.orm import relationship
 from .base import Base

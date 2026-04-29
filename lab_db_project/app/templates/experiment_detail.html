@@ -28,10 +28,10 @@
         <p><span class="label">Комментарий:</span> <span class="value">{{ exp.comments or '—' }}</span></p>
     </div>
 
-    <div style="margin-bottom: 20px;">
+    <div style="margin-bottom: 20px; display: flex; gap: 10px;">
         <a href="/experiments/{{ exp.id_experiment }}/edit" style="padding: 10px 20px; background: #ffc107; color: white; border-radius: 5px; text-decoration: none;">✏️ Редактировать</a>
         <form action="/experiments/{{ exp.id_experiment }}/delete" method="post" style="display: inline;" onsubmit="return confirm('Точно удалить этот эксперимент?');">
-            <button type="submit" style="padding: 10px 20px; background: #dc3545; color: white; border: none; border-radius: 5px; margin-left: 10px;">🗑️ Удалить</button>
+            <button type="submit" style="padding: 10px 20px; background: #dc3545; color: white; border: none; border-radius: 5px;">🗑️ Удалить</button>
         </form>
     </div>
 
@@ -56,14 +56,10 @@
         <p><span class="label">Описание:</span> <span class="value">{{ exp.sample.description }}</span></p>
         {% endif %}
         {% if exp.sample.geometry %}
-        <p><span class="label">Геометрия:</span><br>
-            <pre>{{ exp.sample.geometry | tojson(indent=2) }}</pre>
-        </p>
+        <p><span class="label">Геометрия:</span> <span class="value">{{ exp.sample.geometry | format_json }}</span></p>
         {% endif %}
         {% if exp.sample.physical_properties %}
-        <p><span class="label">Физические свойства:</span><br>
-            <pre>{{ exp.sample.physical_properties | tojson(indent=2) }}</pre>
-        </p>
+        <p><span class="label">Физические свойства:</span> <span class="value">{{ exp.sample.physical_properties | format_json }}</span></p>
         {% endif %}
     </div>
 
@@ -71,9 +67,7 @@
         <h2>Оборудование</h2>
         <p><span class="label">Ударяющий элемент (Striker):</span> <span class="value">{{ exp.striker.material }}</span></p>
         {% if exp.striker.geometric_dimensions %}
-        <p><span class="label">Размеры striker:</span><br>
-            <pre>{{ exp.striker.geometric_dimensions | tojson(indent=2) }}</pre>
-        </p>
+        <p><span class="label">Размеры striker:</span> <span class="value">{{ exp.striker.geometric_dimensions | format_json }}</span></p>
         {% endif %}
 
         <p><span class="label">Нагружающий стержень:</span> <span class="value">{{ exp.loading_rod.material }} (ID: {{ exp.loading_rod.id_rod }})</span></p>
@@ -84,9 +78,7 @@
     <div class="section">
         <h2>Результат эксперимента</h2>
         {% if exp.result.measurements %}
-        <p><span class="label">Измерения:</span><br>
-            <pre>{{ exp.result.measurements | tojson(indent=2) }}</pre>
-        </p>
+        <p><span class="label">Измерения:</span> <span class="value">{{ exp.result.measurements | format_json }}</span></p>
         {% endif %}
         {% if exp.result.oscillogram_file %}
         <p><span class="label">Осциллограмма:</span> <span class="value">{{ exp.result.oscillogram_file.file_path }}</span></p>
@@ -94,21 +86,31 @@
     </div>
     {% endif %}
 
-    {% if exp.files %}
     <div class="section">
         <h2>Прикреплённые файлы ({{ exp.files|length }})</h2>
+        {% if exp.files %}
         <ul>
             {% for file in exp.files %}
-            <li>{{ file.file_type or 'Файл' }}: {{ file.file_path }} (создан: {{ file.created_at }})</li>
+            <li style="margin-bottom: 8px;">
+                <span class="label">{{ file.file_type or 'Файл' }}:</span> 
+                <a href="/{{ file.file_path }}" target="_blank">{{ file.file_path.split('/')[-1] }}</a> 
+                <form action="/files/delete/{{ file.id_file }}" method="post" style="display:inline; margin-left: 10px;" onsubmit="return confirm('Удалить этот файл?');">
+                    <button type="submit" style="background:#ffc7c7; border:1px solid #ff0000; color:#c00; cursor:pointer; padding:2px 8px; border-radius:3px; font-size: 11px;">Удалить</button>
+                </form>
+            </li>
             {% endfor %}
         </ul>
-    </div>
-    {% else %}
-    <div class="section">
-        <h2>Прикреплённые файлы</h2>
+        {% else %}
         <p>Файлы пока не прикреплены.</p>
+        {% endif %}
+
+        <hr>
+        <h3>Загрузить новый файл</h3>
+        <form action="/files/upload/{{ exp.id_experiment }}" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" required>
+            <button type="submit" style="padding: 5px 15px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">Загрузить</button>
+        </form>
     </div>
-    {% endif %}
 
 </body>
 </html>

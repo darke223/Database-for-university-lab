@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% if is_edit %}Редактировать образец №{{ sample.id_sample }}{% else %}Добавить образец{% endif %}
+    </title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f8f9fa; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; margin-bottom: 30px; text-align: center; }
+        label { display: block; margin-top: 20px; font-weight: bold; color: #444; }
+        select, textarea, input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        textarea.json-area { font-family: monospace; font-size: 14px; background: #fafafa; height: 120px; }
+        button {
+            margin-top: 40px;
+            padding: 14px 28px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover { background: #218838; }
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .info { font-size: 0.85em; color: #666; margin-top: 4px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            {% if is_edit %}🧪 Редактировать образец №{{ sample.id_sample }}{% else %}🧪 Регистрация нового образца{% endif %}
+        </h1>
+        <form action="{% if is_edit %}/samples/{{ sample.id_sample }}/edit{% else %}/samples/new{% endif %}" method="post">
+            <label>Материал</label>
+            <select name="id_material" required>
+                {% for mat in materials %}
+                <option value="{{ mat.id_material }}" {% if is_edit and sample.id_material == mat.id_material %}selected{% endif %}>{{ mat.name }}</option>
+                {% endfor %}
+            </select>
+
+            <label>Геометрия (JSON)</label>
+            <div class="info">Укажите любые параметры в формате JSON</div>
+            <textarea name="geometry_json" class="json-area" required>{% if is_edit %}{{ geom_str }}{% else %}{
+  "диаметр": 10.0,
+  "длина": 55.0
+}{% endif %}</textarea>
+
+            <label>Физические свойства (JSON)</label>
+            <div class="info">Характеристики в формате JSON</div>
+            <textarea name="properties_json" class="json-area" required>{% if is_edit %}{{ phys_str }}{% else %}{
+  "плотность": 7800,
+  "модуль_упругости": 210
+}{% endif %}</textarea>
+
+            <label>Описание / Примечания</label>
+            <textarea name="description" rows="3" placeholder="Дополнительная информация...">{% if is_edit %}{{ sample.description or '' }}{% endif %}</textarea>
+
+            <button type="submit">💾 {% if is_edit %}Сохранить изменения{% else %}Создать образец{% endif %}</button>
+        </form>
+        <a href="/samples/" class="back-link">← К списку образцов</a>
+        <a href="/" class="back-link">🏠 На главную</a>
+    </div>
+</body>
+</html>

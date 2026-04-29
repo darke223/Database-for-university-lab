@@ -8,7 +8,7 @@ class File(Base):
 
     id_file = Column(Integer, primary_key=True, autoincrement=True)
     file_path = Column(Text, nullable=False)
-    file_type = Column(String(50))
+    file_type = Column(String(255))
     created_at = Column(TIMESTAMP, server_default=func.now())
 
     # Осциллограммы для результатов

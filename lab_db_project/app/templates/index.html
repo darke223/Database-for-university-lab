@@ -29,18 +29,35 @@
 </head>
 <body>
     <div class="container">
-        <h1>Лабораторная база данных</h1>
-        <p>Система учёта механических испытаний материалов</p>
+        <h1>🏥 Lab Data Hub</h1>
+        <p>Информационная система лаборатории механики материалов</p>
+
+        <div class="dashboard" style="display: flex; justify-content: space-around; margin-bottom: 40px; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+            <div class="stat-item">
+                <div style="font-size: 2em; font-weight: bold; color: #007bff;">{{ total }}</div>
+                <div style="color: #666;">Всего испытаний</div>
+            </div>
+            {% for status, count in status_counts.items() %}
+            <div class="stat-item">
+                <div style="font-size: 2em; font-weight: bold; color: #28a745;">{{ count }}</div>
+                <div style="color: #666;">{{ status }}</div>
+            </div>
+            {% endfor %}
+        </div>
 
         <div class="menu">
-            <a href="/experiments/">📋 Эксперименты</a>
-            <a href="/customers/">👥 Клиенты</a>
-            <a href="/contracts/">📄 Контракты</a>
-            <a href="/materials/">🧪 Материалы</a>
+            <a href="/experiments/">📋 Список экспериментов</a>
+            <a href="/experiments/search">🔍 Поиск по тех. параметрам</a>
+            <a href="/samples/">🧪 Реестр образцов</a>
+            <a href="/strikers/">🔨 Ударники (Strikers)</a>
+            <hr style="width: 100%; border: 0; border-top: 1px solid #eee; margin: 10px 0;">
+            <a href="/customers/">👥 Справочник клиентов</a>
+            <a href="/contracts/">📄 Контракты и ТЗ</a>
+            <a href="/materials/">🧪 Типы материалов</a>
         </div>
 
         <footer>
-            <p>Проект по базам данных • 2025</p>
+            <p>Data Engineering Laboratory System • v2.0</p>
         </footer>
     </div>
 </body>

@@ -1,7 +1,6 @@
-# app/routers/contracts.py
 from fastapi import APIRouter, Depends, Request, Form, HTTPException
 from fastapi.responses import RedirectResponse
-from fastapi.templating import Jinja2Templates
+from app.templates import templates
 from sqlalchemy.orm import Session
 from datetime import date
 
@@ -10,7 +9,6 @@ from app.models.contract import Contract
 from app.models.customer import Customer
 
 router = APIRouter(prefix="/contracts", tags=["contracts"])
-templates = Jinja2Templates(directory="app/templates")
 
 def get_db():
     db = SessionLocal()
